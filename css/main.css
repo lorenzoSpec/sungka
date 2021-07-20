@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --dark-blue: #383C4A;
+  --dark-gray: #4B5162;
+  --gray: #7C818C;
+  --blue: #5294E2;
+}
+
+/*  SUNGKA BOARD  */
+#sungka-board {
+  width: 60%;
+  background-color: var(--dark-blue);
+  display: grid;
+  grid-template-areas: 'headO one two three four five six seven headT'
+                       'headO eight nine ten eleven twelve thirteen fourteen headT';
+  grid-gap: 10px;
+  border-radius: 120px;
+  justify-items: center;
+  align-items: center;
+  padding: 15px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+}
+
+.heads {
+  width: 5.5vw;
+  height: 5.5vw;
+  background-color: var(--gray);
+  padding: 20px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.houses {
+  width: 3.5vw;
+  height: 3.5vw;
+  background-color: var(--gray);
+  padding: 10px;
+  border-radius: 50%;
+  position: relative;
+}
+
+#head1 {
+  grid-area: headO;
+}
+
+#house1 {
+  grid-area: one;
+}
+
+#house2 {
+  grid-area: two;
+}
+
+#house3 {
+  grid-area: three;
+}
+
+#house4 {
+  grid-area: four;
+}
+
+#house6 {
+  grid-area: six;
+}
+
+#house7 {
+  grid-area: seven;
+}
+
+#house8 {
+  grid-area: eight;
+}
+
+#house9 {
+  grid-area: nine;
+}
+
+#house10 {
+  grid-area: ten;
+}
+
+#house11 {
+  grid-area: eleven;
+}
+
+#house12 {
+  grid-area: twelve;
+}
+
+#house13 {
+  grid-area: thirteen;
+}
+
+#house14 {
+  grid-area: fourteen;
+}
+
+#head2 {
+  grid-area: headT;
+}
+
+.count-house, .count-head {
+  width: 20px;
+  height: 20px;
+  background-color: var(--dark-gray);
+  color: white;
+  font-size: 10px;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding: 3px;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.count-house {
+  top: -5px;
+  right: -5px;
+}
+
+.count-head {
+  top: 0;
+  right: 0;
+}
+
+/*  PLAYER BAR  */
+.player-bars {
+  box-sizing: border-box;
+  width: 50%;
+  position: fixed;
+  bottom: 0;
+  opacity: 0.8;
+}
+
+#player1 {
+  left: 0;
+}
+
+#player2 {
+  right: 0;
+}
