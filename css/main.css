@@ -19,7 +19,7 @@
 
 /*  SUNGKA BOARD  */
 #sungka-board {
-  width: 60%;
+  width: 60vw;
   background-color: var(--dark-blue);
   display: grid;
   grid-template-areas: 'headO one two three four five six seven headT'
@@ -114,11 +114,11 @@
 }
 
 .count-house, .count-head {
-  width: 20px;
-  height: 20px;
+  width: 1.5vw;
+  height: 1.5vw;
   background-color: var(--dark-gray);
   color: white;
-  font-size: 10px;
+  font-size: 0.8vw;
   font-family: 'Poppins', sans-serif;
   text-align: center;
   padding: 3px;
