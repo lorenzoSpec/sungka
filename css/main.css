@@ -17,6 +17,34 @@
   --blue: #5294E2;
 }
 
+.small-h1,
+.big-h1,
+.houses,
+.player-house-highlight,
+.player-house-non-highlight,
+.player-bars,
+.player-turn {
+  transition: all 0.1s linear;
+}
+
+
+/*  PLAYER IDENTITY  */
+#player-id {
+  color: var(--dark-blue);
+  font-family: 'Montserrat', sans-serif;
+  margin: 20px;
+  text-align: center;
+}
+
+.small-h1 {
+  font-size: 0px;
+}
+
+.big-h1 {
+  font-size: 30px;
+}
+
+
 /*  SUNGKA BOARD  */
 #sungka-board {
   width: 60vw;
@@ -113,6 +141,14 @@
   grid-area: headT;
 }
 
+.player-house-highlight {
+  border: 3px solid white;
+}
+
+.player-house-non-highlight {
+  opacity: 0.5;
+}
+
 .count-house, .count-head {
   width: 1.5vw;
   height: 1.5vw;
@@ -145,10 +181,14 @@
   opacity: 0.8;
 }
 
-#player1 {
+.player-turn {
+  opacity: 1;
+}
+
+#player1-bar {
   left: 0;
 }
 
-#player2 {
+#player2-bar {
   right: 0;
 }
