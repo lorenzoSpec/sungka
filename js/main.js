@@ -4,12 +4,23 @@
     GLOBAL VARIABLES
  
  ==================================================================================*/
+ const BODY = document.getElementById('body');
  const PLAYER1SIDE = document.querySelectorAll('.player1-side');
  const PLAYER2SIDE = document.querySelectorAll('.player2-side');
  const PLAYER1BAR = document.getElementById('player1-bar');
  const PLAYER2BAR = document.getElementById('player2-bar');
  const H1 = document.getElementById('player-id');
 
+ let varNamesP1 = [];
+ for(let i = 0; i < PLAYER1SIDE.length; i++){
+   varNamesP1.push('getDias'+i);
+ }
+
+/*==================================================================================
+ 
+    ABOUT THE DIAMOND AND THE COUNT OF IT
+ 
+ ==================================================================================*/
 
 /* add diamond on certain house */
 function putSevenDiamond(){
@@ -26,7 +37,9 @@ function putSevenDiamond(){
 function diamond(){
   const IMG = document.createElement('img');
   IMG.setAttribute('src', 'img/diamond.svg');
-  IMG.setAttribute('style', `width: 1.5vw; position: absolute; top: ${randomized()}vw; left: ${randomized()}vw;`);
+  IMG.setAttribute('class', 'diamond-class');
+  IMG.setAttribute('alt', 'diamond');
+  IMG.setAttribute('style', `top: ${randomized()}vw; left: ${randomized()}vw;`);
 
   return IMG;
 }
@@ -48,6 +61,9 @@ function counter(){
   }
 }
 
+window.addEventListener('load', putSevenDiamond);
+window.addEventListener('load', counter);
+
 /*==================================================================================
  
     PLAYER ONE TURN
@@ -59,8 +75,10 @@ function counter(){
 function playerOneTurn(){
   highlightHouseP1();
   h1andBarP1();
+  eventsForHouseP1();
 }
 
+/* highlight the houses of player one */
 function highlightHouseP1(){
   for(let i = 0; i < PLAYER1SIDE.length; i++){
     PLAYER1SIDE[i].classList.remove('player-house-non-highlight');
@@ -71,6 +89,7 @@ function highlightHouseP1(){
   }
 }
 
+/* highlight the player one h1 and bar */
 function h1andBarP1(){
   PLAYER2BAR.classList.remove('player-turn');
   PLAYER1BAR.classList.add('player-turn');
@@ -85,6 +104,79 @@ function h1andBarP1(){
   }, 500);
 }
 
+/* put event listeners for houses on player one side */
+function eventsForHouseP1(){
+  for(let i = 0; i < PLAYER1SIDE.length; i++){
+    PLAYER1SIDE[i].addEventListener('click', varNamesP1[i] = deleteDiamond.bind(PLAYER1SIDE[i], PLAYER1SIDE[i]));
+  }
+}
+
+/* delete the diamonds on houses that are clicked */
+function deleteDiamond(el){
+  
+  let saveDiamonds = [];
+
+  for(let i = 0; i < el.children.length; i++){
+    if(el.children[i].classList[0] === 'diamond-class'){
+      saveDiamonds.push(el.children[i]);
+    }
+  }
+
+  if(saveDiamonds.length > 0){
+    saveDiamonds.forEach(x => {
+      x.classList.add('diamond-class-hide');
+    });
+
+    setTimeout(()=> {
+      saveDiamonds.forEach(x => {
+        el.removeChild(x);
+        counter();
+      });
+    }, 99);
+  }
+  
+  diamondOnHand(saveDiamonds);
+}
+
+/* append the diamond on hand in the center of screen */
+function diamondOnHand(saveDiamonds){
+  const CONT = document.createElement('div');
+  const IMGONHAND = document.createElement('img');
+  const PONHAND = document.createElement('p');
+
+  const PTEXT = document.createTextNode(saveDiamonds.length);
+
+  CONT.setAttribute('id', 'diamond-count-on-hand');
+
+  IMGONHAND.setAttribute('src', 'img/diamond.svg');
+  IMGONHAND.setAttribute('alt', 'diamond on hand');
+  IMGONHAND.setAttribute('id', 'img-dcoh');
+
+  PONHAND.setAttribute('id', 'p-dcoh');
+
+  CONT.appendChild(IMGONHAND);
+  CONT.appendChild(PONHAND);
+  PONHAND.appendChild(PTEXT);
+
+  BODY.appendChild(CONT);
+
+  clearUpP1();
+}
+
+function clearUpP1(){
+  for(let i = 0; i < PLAYER1SIDE.length; i++){
+    PLAYER1SIDE[i].classList.remove('player-house-highlight');
+    PLAYER1SIDE[i].classList.add('player-house-non-highlight');
+    PLAYER1SIDE[i].removeEventListener('click', varNamesP1[i]);
+  }
+}
+
+window.addEventListener('load', function(){
+  this.setTimeout(function(){
+    playerOneTurn();
+  }, 1000);
+});
+
 /*==================================================================================
  
     PLAYER TWO TURN
@@ -98,6 +190,8 @@ function playerTwoTurn(){
   h1andBarP2();
 }
 
+
+/* highlight the houses of player two side */
 function highlightHouseP2(){
   for(let i = 0; i < PLAYER1SIDE.length; i++){
     PLAYER1SIDE[i].classList.remove('player-house-highlight');
@@ -108,6 +202,7 @@ function highlightHouseP2(){
   }
 }
 
+/* highlight the player two h1 and bar */
 function h1andBarP2(){
   PLAYER1BAR.classList.remove('player-turn');
   PLAYER2BAR.classList.add('player-turn');
@@ -121,11 +216,3 @@ function h1andBarP2(){
     H1.textContent = 'Player 2';
   }, 500);
 }
-
-window.addEventListener('load', putSevenDiamond);
-window.addEventListener('load', counter);
-window.addEventListener('load', function(){
-  this.setTimeout(function(){
-    playerOneTurn();
-  }, 1000);
-});

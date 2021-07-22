@@ -23,7 +23,9 @@
 .player-house-highlight,
 .player-house-non-highlight,
 .player-bars,
-.player-turn {
+.player-turn,
+.diamond-class,
+.diamond-class-hide {
   transition: all 0.1s linear;
 }
 
@@ -171,6 +173,58 @@
   top: 0;
   right: 0;
 }
+
+.diamond-class {
+  width: 1.5vw;
+  position: absolute;
+  animation: diamondPut 0.5s forwards;
+}
+
+@keyframes diamondPut {
+  from {
+    transform: translate(-100%, -100%);
+  } 
+   
+  to {
+    transform: translate(0, 0);
+  }
+}
+
+.diamond-class-hide {
+  opacity: 0;
+}
+
+/*  DIAMOND-COUNT ON HAND (DCOH)  */
+#diamond-count-on-hand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  animation: dcoh 0.5s forwards;
+}
+
+@keyframes dcoh {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+#img-dcoh {
+  width: 3vw;
+}
+
+#p-dcoh {
+  font-size: 2vw;
+  font-family: 'Poppins', sans-serif;
+}
+
 
 /*  PLAYER BAR  */
 .player-bars {
