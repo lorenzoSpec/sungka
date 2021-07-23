@@ -25,7 +25,8 @@
 .player-bars,
 .player-turn,
 .diamond-class,
-.diamond-class-hide {
+.diamond-class-hide,
+.player-house-distribute {
   transition: all 0.1s linear;
 }
 
@@ -145,6 +146,10 @@
 
 .player-house-highlight {
   border: 3px solid white;
+}
+
+.player-house-distribute {
+  border: 3px dashed white;
 }
 
 .player-house-non-highlight {

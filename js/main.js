@@ -7,6 +7,8 @@
  const BODY = document.getElementById('body');
  const PLAYER1SIDE = document.querySelectorAll('.player1-side');
  const PLAYER2SIDE = document.querySelectorAll('.player2-side');
+ const PLAYER1HEAD = document.getElementById('head2');
+ const PLAYER2HEAD = document.getElementById('head1');
  const PLAYER1BAR = document.getElementById('player1-bar');
  const PLAYER2BAR = document.getElementById('player2-bar');
  const H1 = document.getElementById('player-id');
@@ -55,9 +57,14 @@ function randomized(){
 /* count the diamond inside */
 function counter(){
   const COUNTDIV = document.querySelectorAll('.count-house');
+  const COUNTHEAD = document.querySelectorAll('.count-head');
 
   for(let i = 0; i < COUNTDIV.length; i++){
     COUNTDIV[i].textContent = COUNTDIV[i].parentNode.children.length - 1;
+  }
+
+  for(let i = 0; i < COUNTHEAD.length; i++){
+    COUNTHEAD[i].textContent = COUNTHEAD[i].parentNode.children.length - 1;
   }
 }
 
@@ -130,12 +137,15 @@ function deleteDiamond(el){
     setTimeout(()=> {
       saveDiamonds.forEach(x => {
         el.removeChild(x);
+        x.classList.remove('diamond-class-hide');
         counter();
       });
     }, 99);
   }
   
   diamondOnHand(saveDiamonds);
+  clearUpP1();
+  distributeDiamonds(el, saveDiamonds)
 }
 
 /* append the diamond on hand in the center of screen */
@@ -159,8 +169,6 @@ function diamondOnHand(saveDiamonds){
   PONHAND.appendChild(PTEXT);
 
   BODY.appendChild(CONT);
-
-  clearUpP1();
 }
 
 function clearUpP1(){
@@ -176,6 +184,47 @@ window.addEventListener('load', function(){
     playerOneTurn();
   }, 1000);
 });
+
+/*==================================================================================
+ 
+    DISTRIBUTE THE DIAMONDS
+ 
+ ==================================================================================*/
+
+function distributeDiamonds(el, saveDiamonds){
+  const PDCOH = document.getElementById('p-dcoh');
+  let reversedSide2 = [...PLAYER2SIDE].reverse();
+  let toBeFilled = [...PLAYER1SIDE, PLAYER1HEAD, ...reversedSide2];
+  
+
+  for(let i = 0; i < toBeFilled.length; i++){
+    if(el.id === toBeFilled[i].id){
+
+      setTimeout(() => {
+        let counterUntil = 1;
+
+        function adding(){
+          
+          toBeFilled[i + counterUntil].appendChild(saveDiamonds[counterUntil - 1]);
+          counterUntil = counterUntil + 1;
+          PDCOH.textContent = [saveDiamonds.length - counterUntil + 1];
+
+          counter();
+          
+
+          if(counterUntil < saveDiamonds.length + 1){
+            setTimeout(() => {
+              adding();
+              //console.log(counterUntil);
+            }, 500);
+          }
+        }
+        adding();
+      }, 1000);
+
+    }
+  };
+}
 
 /*==================================================================================
  
