@@ -82,7 +82,7 @@ window.addEventListener('load', counter);
 function playerOneTurn(){
   highlightHouseP1();
   h1andBarP1();
-  eventsForHouseP1();
+  eventsForHouse('player-one');
 }
 
 /* highlight the houses of player one */
@@ -111,128 +111,7 @@ function h1andBarP1(){
   }, 500);
 }
 
-/* put event listeners for houses on player one side */
-function eventsForHouseP1(){
-  for(let i = 0; i < PLAYER1SIDE.length; i++){
-    PLAYER1SIDE[i].addEventListener('click', varNamesP1[i] = deleteDiamond.bind(PLAYER1SIDE[i], PLAYER1SIDE[i]));
-  }
-}
 
-/* delete the diamonds on houses that are clicked */
-function deleteDiamond(el){
-  
-  let saveDiamonds = [];
-
-  for(let i = 0; i < el.children.length; i++){
-    if(el.children[i].classList[0] === 'diamond-class'){
-      saveDiamonds.push(el.children[i]);
-    }
-  }
-
-  if(saveDiamonds.length > 0){
-    saveDiamonds.forEach(x => {
-      x.classList.add('diamond-class-hide');
-    });
-
-    setTimeout(()=> {
-      saveDiamonds.forEach(x => {
-        el.removeChild(x);
-        x.classList.remove('diamond-class-hide');
-        counter();
-      });
-    }, 99);
-  }
-  
-  diamondOnHand(saveDiamonds);
-  clearUpP1();
-  distributeDiamonds(el, saveDiamonds)
-}
-
-/* append the diamond on hand in the center of screen */
-function diamondOnHand(saveDiamonds){
-  const CONT = document.createElement('div');
-  const IMGONHAND = document.createElement('img');
-  const PONHAND = document.createElement('p');
-
-  const PTEXT = document.createTextNode(saveDiamonds.length);
-
-  CONT.setAttribute('id', 'diamond-count-on-hand');
-
-  IMGONHAND.setAttribute('src', 'img/diamond.svg');
-  IMGONHAND.setAttribute('alt', 'diamond on hand');
-  IMGONHAND.setAttribute('id', 'img-dcoh');
-
-  PONHAND.setAttribute('id', 'p-dcoh');
-
-  CONT.appendChild(IMGONHAND);
-  CONT.appendChild(PONHAND);
-  PONHAND.appendChild(PTEXT);
-
-  BODY.appendChild(CONT);
-}
-
-function clearUpP1(){
-  for(let i = 0; i < PLAYER1SIDE.length; i++){
-    PLAYER1SIDE[i].classList.remove('player-house-highlight');
-    PLAYER1SIDE[i].classList.add('player-house-non-highlight');
-    PLAYER1SIDE[i].removeEventListener('click', varNamesP1[i]);
-  }
-}
-
-window.addEventListener('load', function(){
-  this.setTimeout(function(){
-    playerOneTurn();
-  }, 1000);
-});
-
-/*==================================================================================
- 
-    DISTRIBUTE THE DIAMONDS
- 
- ==================================================================================*/
-
-function distributeDiamonds(el, saveDiamonds){
-  const PDCOH = document.getElementById('p-dcoh');
-  let reversedSide2 = [...PLAYER2SIDE].reverse();
-  let toBeFilled = [...PLAYER1SIDE, PLAYER1HEAD, ...reversedSide2];
-  
-  addOneByOne(el, saveDiamonds, PDCOH, toBeFilled);
-}
-
-function addOneByOne(el, saveDiamonds, PDCOH, toBeFilled){
-  for(let i = 0; i < toBeFilled.length; i++){
-    if(el.id === toBeFilled[i].id){
-      setTimeout(() => {
-        let counterUntil = 1;
-        function adding(){
-          addHighlightRemove(toBeFilled, i, counterUntil, saveDiamonds);
-          counter();
-          PDCOH.textContent = [saveDiamonds.length - counterUntil];
-          counterUntil = counterUntil + 1;
-          iterateDist(counterUntil, saveDiamonds, adding);
-        }
-        adding();
-      }, 500);
-    }
-  };
-}   
-
-function addHighlightRemove(toBeFilled, i, counterUntil, saveDiamonds){
-  let wrapIndex = (arr, index) => index % arr.length;
-  toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].appendChild(saveDiamonds[counterUntil - 1]);
-  toBeFilled[wrapIndex(toBeFilled, i + counterUntil - 1)].classList.remove('player-house-distribute');
-  toBeFilled[wrapIndex(toBeFilled, i + counterUntil - 1)].classList.add('player-house-non-highlight');
-  toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].classList.remove('player-house-non-highlight');
-  toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].classList.add('player-house-distribute');
-}
-
-function iterateDist(counterUntil, saveDiamonds, adding){
-  if(counterUntil < saveDiamonds.length + 1){
-    setTimeout(() => {
-      adding();
-    }, 500);
-  }
-}
 
 /*==================================================================================
  
@@ -245,6 +124,7 @@ function iterateDist(counterUntil, saveDiamonds, adding){
 function playerTwoTurn(){
   highlightHouseP2();
   h1andBarP2();
+  eventsForHouse('player-two');
 }
 
 
@@ -273,3 +153,224 @@ function h1andBarP2(){
     H1.textContent = 'Player 2';
   }, 500);
 }
+
+/*==================================================================================
+ 
+    FUNCTIONALITIES
+ 
+ ==================================================================================*/
+
+/* put event listeners for houses on player one side */
+function eventsForHouse(whichPlayer){
+  let thisPlayer = whichFunc(whichPlayer);
+
+  for(let i = 0; i < thisPlayer.length; i++){
+    if(thisPlayer[i].children.length > 1){
+      thisPlayer[i].addEventListener('click', varNamesP1[i] = deleteDiamond.bind(thisPlayer[i], thisPlayer[i], whichPlayer));
+    }
+  }
+}
+
+/* know which player call this functions */
+function whichFunc(whichPlayer){
+  if(whichPlayer === 'player-one'){
+    return PLAYER1SIDE;
+  } else if (whichPlayer === 'player-two'){
+    return PLAYER2SIDE;
+  }
+}
+
+/* delete the diamonds on houses that are clicked */
+function deleteDiamond(el, whichPlayer){
+  
+  let saveDiamonds = [];
+
+  for(let i = 0; i < el.children.length; i++){
+    if(el.children[i].classList[0] === 'diamond-class'){
+      saveDiamonds.push(el.children[i]);
+    }
+  }
+
+  if(saveDiamonds.length > 0){
+    saveDiamonds.forEach(x => {
+      x.classList.add('diamond-class-hide');
+    });
+
+    setTimeout(()=> {
+      saveDiamonds.forEach(x => {
+        el.removeChild(x);
+        x.classList.remove('diamond-class-hide');
+        counter();
+      });
+    }, 99);
+  }
+  
+  diamondOnHand(saveDiamonds);
+  clearUpP1(whichPlayer);
+  distributeDiamonds(el, saveDiamonds, whichPlayer)
+}
+
+/* append the diamond on hand in the center of screen */
+function diamondOnHand(saveDiamonds){
+  const CONT = document.createElement('div');
+  const IMGONHAND = document.createElement('img');
+  const PONHAND = document.createElement('p');
+
+  const PTEXT = document.createTextNode(saveDiamonds.length);
+
+  CONT.setAttribute('id', 'diamond-count-on-hand');
+
+  IMGONHAND.setAttribute('src', 'img/diamond.svg');
+  IMGONHAND.setAttribute('alt', 'diamond on hand');
+  IMGONHAND.setAttribute('id', 'img-dcoh');
+
+  PONHAND.setAttribute('id', 'p-dcoh');
+
+  CONT.appendChild(IMGONHAND);
+  CONT.appendChild(PONHAND);
+  PONHAND.appendChild(PTEXT);
+
+  setTimeout(() => {
+    BODY.appendChild(CONT);
+  }, 300);
+}
+
+function clearUpP1(whichPlayer){
+  let thisPlayer2 = whichFunc(whichPlayer);
+
+  for(let i = 0; i < thisPlayer2.length; i++){
+    thisPlayer2[i].classList.remove('player-house-highlight');
+    thisPlayer2[i].classList.add('player-house-non-highlight');
+    thisPlayer2[i].removeEventListener('click', varNamesP1[i]);
+  }
+}
+
+window.addEventListener('load', function(){
+  this.setTimeout(function(){
+    playerOneTurn();
+  }, 1000);
+});
+
+/*==================================================================================
+ 
+    DISTRIBUTE THE DIAMONDS
+ 
+ ==================================================================================*/
+
+function distributeDiamonds(el, saveDiamonds, whichPlayer){
+  let reversedSide2 = [...PLAYER2SIDE].reverse();
+  let toBeFilled = whichFunc2(whichPlayer, reversedSide2);
+
+  addOneByOne(el, saveDiamonds, toBeFilled, whichPlayer);
+}
+
+function whichFunc2(whichPlayer, reversedSide2){
+  if(whichPlayer === 'player-one'){
+    return [...PLAYER1SIDE, PLAYER1HEAD, ...reversedSide2];
+  } else if (whichPlayer === 'player-two'){
+    return [...reversedSide2, PLAYER2HEAD, ...PLAYER1SIDE];
+  }
+}
+
+function addOneByOne(el, saveDiamonds, toBeFilled, whichPlayer){
+  for(let i = 0; i < toBeFilled.length; i++){
+    if(el.id === toBeFilled[i].id){
+      setTimeout(() => {
+        let counterUntil = 1;
+        function adding(){
+          addHighlightRemove(toBeFilled, i, counterUntil, saveDiamonds, whichPlayer);
+          counter();
+          updatePDOCH(saveDiamonds, counterUntil);
+          counterUntil = counterUntil + 1;
+          iterateDist(counterUntil, saveDiamonds, adding);
+        }
+        adding();
+      }, 900);
+    }
+  };
+}  
+
+function addHighlightRemove(toBeFilled, i, counterUntil, saveDiamonds, whichPlayer){
+  let wrapIndex = (arr, index) => index % arr.length;
+  toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].appendChild(saveDiamonds[counterUntil - 1]);
+  toBeFilled[wrapIndex(toBeFilled, i + counterUntil - 1)].classList.remove('player-house-distribute');
+  if(!toBeFilled[wrapIndex(toBeFilled, i + counterUntil - 1)].classList.contains('heads')){
+    toBeFilled[wrapIndex(toBeFilled, i + counterUntil - 1)].classList.add('player-house-non-highlight');
+  }
+  toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].classList.remove('player-house-non-highlight');
+  toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].classList.add('player-house-distribute');
+
+  if(saveDiamonds.length === counterUntil){
+    toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].classList.remove('player-house-distribute');
+    continueOrNot(saveDiamonds, counterUntil, toBeFilled[wrapIndex(toBeFilled, i + counterUntil)], whichPlayer);
+  }
+}
+
+function updatePDOCH(saveDiamonds, counterUntil){
+  const PDCOH = document.getElementById('p-dcoh');
+
+  if(saveDiamonds.length === counterUntil){
+    BODY.removeChild(PDCOH.parentNode);
+  }
+
+  PDCOH.textContent = [saveDiamonds.length - counterUntil];
+}
+
+
+
+function iterateDist(counterUntil, saveDiamonds, adding){
+  if(counterUntil < saveDiamonds.length + 1){
+    setTimeout(() => {
+      adding();
+    }, 500);
+  }
+}
+
+/*==================================================================================
+ 
+    DECIDE WHAT HAPPENS AFTER THE LAST DIAMOND WAS DISTRIBUTED
+ 
+ ==================================================================================*/
+
+ function continueOrNot(saveDiamonds, counterUntil, lastEl, whichPlayer){
+
+  if(whichPlayer === 'player-one'){
+    if(lastEl.id === 'head2'){
+      playerOneTurn();
+    } else if (lastEl.classList.contains('player1-side')){
+      if(lastEl.children.length > 2){
+        console.log('nakarating ang player one');
+        deleteDiamond(lastEl, 'player-one');
+      } else if (lastEl.children.length <= 2){
+        playerTwoTurn();
+      }
+    } else if (lastEl.classList.contains('player2-side')) {
+      if(lastEl.children.length > 2){
+        console.log('nakarating ang player one');
+        deleteDiamond(lastEl, 'player-one');
+      } else if (lastEl.children.length <= 2){
+        playerTwoTurn();
+      }
+    }
+
+
+  } else if (whichPlayer === 'player-two'){
+    if(lastEl.id === 'head1'){
+      playerTwoTurn();
+    } else if (lastEl.classList.contains('player1-side')){
+      if(lastEl.children.length > 2){
+        console.log('makarating ang player two');
+        deleteDiamond(lastEl, 'player-two');
+      } else if (lastEl.children.length <= 2){
+        playerOneTurn();
+      }
+    } else if (lastEl.classList.contains('player2-side')) {
+      if(lastEl.children.length > 2){
+        console.log('nakarating ang player two');
+        deleteDiamond(lastEl, 'player-two');
+      } else if (lastEl.children.length <= 2){
+        playerOneTurn();
+      }
+    }
+  } 
+ }
