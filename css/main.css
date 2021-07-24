@@ -25,7 +25,6 @@
 .player-bars,
 .player-turn,
 .diamond-class,
-.diamond-class-hide,
 .player-house-distribute {
   transition: all 0.1s linear;
 }
@@ -197,6 +196,7 @@
 
 .diamond-class-hide {
   opacity: 0;
+  transition: all 1s linear;
 }
 
 /*  DIAMOND-COUNT ON HAND (DCOH)  */
@@ -225,6 +225,12 @@
   width: 3vw;
 }
 
+#big-p {
+  font-size: 1vw;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+}
+
 #p-dcoh {
   font-size: 2vw;
   font-family: 'Poppins', sans-serif;
@@ -237,7 +243,7 @@
   width: 50%;
   position: fixed;
   bottom: 0;
-  opacity: 0.8;
+  opacity: 0.5;
 }
 
 .player-turn {

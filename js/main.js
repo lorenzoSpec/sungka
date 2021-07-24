@@ -80,6 +80,7 @@ window.addEventListener('load', counter);
 
 /* highlight the houses and bar of player one */
 function playerOneTurn(){
+  //winner();
   highlightHouseP1();
   h1andBarP1();
   eventsForHouse('player-one');
@@ -156,6 +157,50 @@ function h1andBarP2(){
 
 /*==================================================================================
  
+    DECLARE THE WINNER
+ 
+ ==================================================================================*/
+
+function winner(){
+  let head1Total = PLAYER1HEAD.children.length - 1;
+  let head2Total = PLAYER2HEAD.children.length - 1;
+  let finish = [];
+
+  for(let i = 0; i < PLAYER1SIDE.length; i++){
+    if(PLAYER1SIDE[i].children.length > 1){
+      finish.push(true);
+    } else {
+      finish.push(false);
+    }
+  }
+
+  for(let i = 0; i < PLAYER2SIDE.length; i++){
+    if(PLAYER2SIDE[i].children.length > 1){
+      finish.push(true);
+    } else {
+      finish.push(false);
+    }
+  }
+
+  let finalWinner = head1Total > head2Total ? 'Player 1' : 'PLayer 2';
+
+  if(finish.indexOf(true) === -1){
+    winnerIndication(finalWinner);
+  }
+}
+
+function winnerIndication(finalWinner){
+  const CONT = document.createElement('div');
+  const WINNER = document.createElement('p');
+  const LOSE = document.createElement('p');
+  const IMG = document.createElement('img');
+  const TOTALDIASW = document.createElement('p');
+  const TOTALDIASL = document.createElement('p'); 
+  const BUTTON = document.createElement('button');
+}
+
+/*==================================================================================
+ 
     FUNCTIONALITIES
  
  ==================================================================================*/
@@ -163,12 +208,51 @@ function h1andBarP2(){
 /* put event listeners for houses on player one side */
 function eventsForHouse(whichPlayer){
   let thisPlayer = whichFunc(whichPlayer);
+  let isEmpty = [];
 
   for(let i = 0; i < thisPlayer.length; i++){
     if(thisPlayer[i].children.length > 1){
+      isEmpty.push(true);
       thisPlayer[i].addEventListener('click', varNamesP1[i] = deleteDiamond.bind(thisPlayer[i], thisPlayer[i], whichPlayer));
+      thisPlayer[i].style.cursor = 'grab';
+    } else {
+      isEmpty.push(false);
     }
   }
+
+  if(isEmpty.indexOf(true) === -1){
+    passIndication();
+    passAndCallOtherFunction(whichPlayer);
+  }
+}
+
+function passAndCallOtherFunction(whichPlayer){
+  setTimeout(() => {
+    if(whichPlayer === 'player-one'){
+      playerTwoTurn();
+    } else if (whichPlayer === 'player-two'){
+      playerOneTurn();
+    }
+  }, 1500);
+}
+
+function passIndication(){
+  const CONT = document.createElement('div');
+  const PASS = document.createElement('p');
+
+  const PTEXT = document.createTextNode('PASS');
+
+  CONT.setAttribute('id', 'diamond-count-on-hand');
+  PASS.setAttribute('id', 'p-dcoh');
+
+  CONT.appendChild(PASS);
+  PASS.appendChild(PTEXT);
+
+  BODY.appendChild(CONT);
+
+  setTimeout(() => {
+    BODY.removeChild(CONT);
+  }, 1500);
 }
 
 /* know which player call this functions */
@@ -292,6 +376,9 @@ function addOneByOne(el, saveDiamonds, toBeFilled, whichPlayer){
 
 function addHighlightRemove(toBeFilled, i, counterUntil, saveDiamonds, whichPlayer){
   let wrapIndex = (arr, index) => index % arr.length;
+  
+  toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].appendChild(saveDiamonds[counterUntil - 1]);
+
   toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].appendChild(saveDiamonds[counterUntil - 1]);
   toBeFilled[wrapIndex(toBeFilled, i + counterUntil - 1)].classList.remove('player-house-distribute');
   if(!toBeFilled[wrapIndex(toBeFilled, i + counterUntil - 1)].classList.contains('heads')){
@@ -302,7 +389,7 @@ function addHighlightRemove(toBeFilled, i, counterUntil, saveDiamonds, whichPlay
 
   if(saveDiamonds.length === counterUntil){
     toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].classList.remove('player-house-distribute');
-    continueOrNot(saveDiamonds, counterUntil, toBeFilled[wrapIndex(toBeFilled, i + counterUntil)], whichPlayer);
+    continueOrNot(toBeFilled[wrapIndex(toBeFilled, i + counterUntil)], whichPlayer, toBeFilled);
   }
 }
 
@@ -332,21 +419,19 @@ function iterateDist(counterUntil, saveDiamonds, adding){
  
  ==================================================================================*/
 
- function continueOrNot(saveDiamonds, counterUntil, lastEl, whichPlayer){
+ function continueOrNot(lastEl, whichPlayer, toBeFilled){
 
   if(whichPlayer === 'player-one'){
     if(lastEl.id === 'head2'){
       playerOneTurn();
     } else if (lastEl.classList.contains('player1-side')){
       if(lastEl.children.length > 2){
-        console.log('nakarating ang player one');
         deleteDiamond(lastEl, 'player-one');
       } else if (lastEl.children.length <= 2){
-        playerTwoTurn();
+        bonusTurnOver(lastEl, toBeFilled, whichPlayer);
       }
     } else if (lastEl.classList.contains('player2-side')) {
       if(lastEl.children.length > 2){
-        console.log('nakarating ang player one');
         deleteDiamond(lastEl, 'player-one');
       } else if (lastEl.children.length <= 2){
         playerTwoTurn();
@@ -359,18 +444,132 @@ function iterateDist(counterUntil, saveDiamonds, adding){
       playerTwoTurn();
     } else if (lastEl.classList.contains('player1-side')){
       if(lastEl.children.length > 2){
-        console.log('makarating ang player two');
         deleteDiamond(lastEl, 'player-two');
       } else if (lastEl.children.length <= 2){
         playerOneTurn();
       }
     } else if (lastEl.classList.contains('player2-side')) {
       if(lastEl.children.length > 2){
-        console.log('nakarating ang player two');
         deleteDiamond(lastEl, 'player-two');
       } else if (lastEl.children.length <= 2){
-        playerOneTurn();
+        bonusTurnOver(lastEl, toBeFilled, whichPlayer);
       }
     }
   } 
  }
+
+ function bonusTurnOver(lastEl, toBeFilled, whichPlayer){
+  const DATAEXCHANGE = {
+    0: 14,
+    1: 13,
+    2: 12,
+    3: 11,
+    4: 10,
+    5: 9,
+    6: 8,
+    7: null,
+    8: 6,
+    9: 5,
+    10: 4, 
+    11: 3,
+    12: 2,
+    13: 1,
+    14: 0
+  }
+
+  let saveBonus = [];
+  let indexLastEl = toBeFilled.indexOf(lastEl);
+  let oppositeIndex = toBeFilled[DATAEXCHANGE[indexLastEl]].id;
+  let oppositeEl = document.getElementById(oppositeIndex);
+
+  let lastElD = lastEl.children;
+  let oppositeElD = oppositeEl.children;
+
+  if(oppositeElD.length > 1){
+    for(let i = 0; i < lastElD.length; i++){
+      if(lastElD[i].classList.contains('diamond-class')){
+        saveBonus.push(lastElD[i]);
+      }
+    }
+  
+    for(let i = 0; i < oppositeElD.length; i++){
+      if(oppositeElD[i].classList.contains('diamond-class')){
+        saveBonus.push(oppositeElD[i]);
+      }
+    }
+  
+    setTimeout(() => {
+      let lastIlan = lastElD.length - 1;
+      saveBonus.forEach((x, index) => {
+        if(index < lastIlan){
+          lastEl.removeChild(x);
+        } else {
+          oppositeEl.removeChild(x);
+        }
+        counter();
+      });
+  
+      bonusIndication(saveBonus);
+      bonusGoesHere(whichPlayer, saveBonus);
+    }, 500);
+  } else if (oppositeElD.length <= 1){
+    if(whichPlayer === 'player-one'){
+      playerTwoTurn();
+    } else if (whichPlayer === 'player-two'){
+      playerOneTurn();
+    }
+  }
+  
+}
+
+function bonusGoesHere(whichPlayer, saveBonus){
+  setTimeout(() => {
+    if(whichPlayer === 'player-one'){
+      saveBonus.forEach((x) => {
+        PLAYER1HEAD.appendChild(x);
+      });
+      counter();
+      setTimeout(() => {
+        playerTwoTurn();
+      }, 1500);
+    } else if (whichPlayer === 'player-two'){
+      saveBonus.forEach((x) => {
+        PLAYER2HEAD.appendChild(x);
+      });
+      counter();
+      setTimeout(() => {
+        playerOneTurn();
+      }, 1500);
+    }
+  }, 1000);
+}
+
+function bonusIndication(saveBonus){
+  const CONT = document.createElement('div');
+  const BIGP = document.createElement('p');
+  const BONUS = document.createElement('p');
+  const IMGONHAND = document.createElement('img');
+
+  const BTXT = document.createTextNode('Bonus ');
+  const PTEXT = document.createTextNode(saveBonus.length);
+
+  CONT.setAttribute('id', 'diamond-count-on-hand');
+  BIGP.setAttribute('id', 'big-p');
+  BONUS.setAttribute('id', 'p-dcoh');
+
+  IMGONHAND.setAttribute('src', 'img/diamond.svg');
+  IMGONHAND.setAttribute('alt', 'diamond on hand');
+  IMGONHAND.setAttribute('id', 'img-dcoh');
+
+  CONT.appendChild(BIGP);
+  CONT.appendChild(IMGONHAND);
+  CONT.appendChild(BONUS);
+  BIGP.appendChild(BTXT);
+  BONUS.appendChild(PTEXT);
+
+  BODY.appendChild(CONT);
+
+  setTimeout(() => {
+    BODY.removeChild(CONT);
+  }, 1000);
+}
