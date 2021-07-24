@@ -196,34 +196,42 @@ function distributeDiamonds(el, saveDiamonds){
   let reversedSide2 = [...PLAYER2SIDE].reverse();
   let toBeFilled = [...PLAYER1SIDE, PLAYER1HEAD, ...reversedSide2];
   
+  addOneByOne(el, saveDiamonds, PDCOH, toBeFilled);
+}
 
+function addOneByOne(el, saveDiamonds, PDCOH, toBeFilled){
   for(let i = 0; i < toBeFilled.length; i++){
     if(el.id === toBeFilled[i].id){
-
       setTimeout(() => {
         let counterUntil = 1;
-
         function adding(){
-          
-          toBeFilled[i + counterUntil].appendChild(saveDiamonds[counterUntil - 1]);
-          counterUntil = counterUntil + 1;
-          PDCOH.textContent = [saveDiamonds.length - counterUntil + 1];
-
+          addHighlightRemove(toBeFilled, i, counterUntil, saveDiamonds);
           counter();
-          
-
-          if(counterUntil < saveDiamonds.length + 1){
-            setTimeout(() => {
-              adding();
-              //console.log(counterUntil);
-            }, 500);
-          }
+          PDCOH.textContent = [saveDiamonds.length - counterUntil];
+          counterUntil = counterUntil + 1;
+          iterateDist(counterUntil, saveDiamonds, adding);
         }
         adding();
-      }, 1000);
-
+      }, 500);
     }
   };
+}   
+
+function addHighlightRemove(toBeFilled, i, counterUntil, saveDiamonds){
+  let wrapIndex = (arr, index) => index % arr.length;
+  toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].appendChild(saveDiamonds[counterUntil - 1]);
+  toBeFilled[wrapIndex(toBeFilled, i + counterUntil - 1)].classList.remove('player-house-distribute');
+  toBeFilled[wrapIndex(toBeFilled, i + counterUntil - 1)].classList.add('player-house-non-highlight');
+  toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].classList.remove('player-house-non-highlight');
+  toBeFilled[wrapIndex(toBeFilled, i + counterUntil)].classList.add('player-house-distribute');
+}
+
+function iterateDist(counterUntil, saveDiamonds, adding){
+  if(counterUntil < saveDiamonds.length + 1){
+    setTimeout(() => {
+      adding();
+    }, 500);
+  }
 }
 
 /*==================================================================================
