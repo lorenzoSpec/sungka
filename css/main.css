@@ -29,7 +29,6 @@
   transition: all 0.1s linear;
 }
 
-
 /*  PLAYER IDENTITY  */
 #player-id {
   color: var(--dark-blue);
@@ -45,7 +44,6 @@
 .big-h1 {
   font-size: 30px;
 }
-
 
 /*  SUNGKA BOARD  */
 #sungka-board {
@@ -166,6 +164,7 @@
   padding: 3px;
   position: absolute;
   border-radius: 50%;
+  z-index: 10000000;
 }
 
 .count-house {
@@ -256,4 +255,79 @@
 
 #player2-bar {
   right: 0;
+}
+
+/*  WINNER INDICATION   */
+#winner-cont {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--dark-gray);
+  color: white;
+  font-family: 'Montserrat', monospace, sans-serif;
+  font-size: 3vw;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  z-index: 100000000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  animation: winORlose 1s forwards;
+}
+
+@keyframes winORlose {
+  from {
+    opacity: 0;
+  } 
+  to {
+    opacity: 1;
+  }
+}
+
+.winner-indication {
+  width: 3vw;
+}
+
+#winner-cont > div {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#div-one {
+  font-weight: bold;
+}
+
+#div-two {
+  font-size: 2vw;
+  margin-top: 50px;
+  opacity: 0.5;
+}
+
+#div-two-draw {
+  margin: 50px;
+  font-weight: bold;
+}
+
+#div-two div img {
+  width: 2vw;
+}
+
+.dias-win-lose {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#btn-new-game {
+  background-color: var(--blue);
+  color: white;
+  padding: 0.9vw;
+  margin: 50px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }
