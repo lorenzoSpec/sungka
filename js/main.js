@@ -1,4 +1,3 @@
-
 /*==================================================================================
  
     GLOBAL VARIABLES
@@ -77,7 +76,6 @@ window.addEventListener('load', counter);
  
  ==================================================================================*/
 
-
 /* highlight the houses and bar of player one */
 function playerOneTurn(){
   winner();
@@ -112,8 +110,6 @@ function h1andBarP1(){
   }, 500);
 }
 
-
-
 /*==================================================================================
  
     PLAYER TWO TURN
@@ -128,7 +124,6 @@ function playerTwoTurn(){
   h1andBarP2();
   eventsForHouse('player-two');
 }
-
 
 /* highlight the houses of player two side */
 function highlightHouseP2(){
@@ -467,7 +462,6 @@ function addHighlightRemove(toBeFilled, i, counterUntil, saveDiamonds, whichPlay
   }
 }
 
-
 /* updating the count on diamond on hand */
 function updatePDOCH(saveDiamonds, counterUntil){
   const PDCOH = document.getElementById('p-dcoh');
@@ -513,7 +507,6 @@ function iterateDist(counterUntil, saveDiamonds, adding){
         playerTwoTurn();
       }
     }
-
 
   } else if (whichPlayer === 'player-two'){
     if(lastEl.id === 'head1'){
@@ -652,3 +645,10 @@ function bonusIndication(saveBonus){
     BODY.removeChild(CONT);
   }, 1000);
 }
+
+/* clear windows events */
+function clearWindowEvents(){
+  window.removeEventListener('load', putSevenDiamond);
+  window.removeEventListener('load', counter);
+}
+window.addEventListener('beforeunload', clearWindowEvents);

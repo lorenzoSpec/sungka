@@ -29,7 +29,6 @@
   transition: all 0.1s linear;
 }
 
-
 /*  PLAYER IDENTITY  */
 #player-id {
   color: var(--dark-blue);
@@ -45,7 +44,6 @@
 .big-h1 {
   font-size: 30px;
 }
-
 
 /*  SUNGKA BOARD  */
 #sungka-board {
@@ -260,7 +258,6 @@
 }
 
 /*  WINNER INDICATION   */
-
 #winner-cont {
   width: 100%;
   height: 100vh;
